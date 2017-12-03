@@ -11,10 +11,14 @@
         </span>
         </h3>
         <ul class="top-list">
-          <li class="top-item" v-for="(item,index) in topLists">
-            <span class="top-index" :class="'top-' + index">{{index}}</span>
-            '圣武星辰'
-            <span class="num">7777</span>
+          <li class="top-item"
+              v-for="(item,index) in topLists[index]"
+              @click="show(item)">
+            <span class="top-index" :class="'top-' + (index+1)">
+              {{index+1}}
+            </span>
+            {{item.bookName}}
+            <span class="num">{{item.number}}</span>
           </li>
         </ul>
       </div>
@@ -23,33 +27,33 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {getRank} from 'api/rank';
+  import {getRankList} from 'api/rank';
+  import {rankCategory} from 'api/config';
 
   export default {
-    created() {
-//      this.get();
-      this.rankCategory = [
-        '百度小说月票榜',
-        '男生热门榜',
-        '女生热门榜',
-        '潜力新书榜',
-        '完本精品榜'
-      ];
-      this.topLists = {
-        1: '1',
-        2: '2',
-        3: '3',
-        4: '4',
-        5: '5'
+    data() {
+      return {
+        topList: [
+          [1, 2, 3, 4],
+          [2, 2, 3, 4],
+          [3, 2, 3, 4],
+          [4, 2, 3, 4]],
+        topLists: this.listOld
       };
     },
+    beforeCreate() {
+      this.rankCategory = rankCategory;
+      this.listOld = getRankList();
+      console.log(this.listOld, 'olsd');
+    },
+    created() {
+//      this.topLists = this.get();
+      console.log(this.topLists);
+      console.log(this.topList);
+    },
     methods: {
-      get() {
-        getRank().then((res) => {
-          console.log(res, 'aaa');
-        }).catch((e) => {
-          console.log(e, 'bbb');
-        });
+      show(item) {
+        console.log(item);
       },
       getTopList(index) {
         alert(index);
@@ -60,7 +64,8 @@
         }
         console.log(index);
       }
-    }
+    },
+    computed: {}
   };
 </script>
 

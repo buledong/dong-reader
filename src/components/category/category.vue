@@ -1,13 +1,13 @@
 <template>
   <div class="category">
-    <div v-for="(item,key) in categoryList" class="cat-box">
+    <div v-for="(items,key) in categoryList" class="cat-box">
       <h3>
-        <span class="key">{{key}}</span>
+        <span class="key">{{items.cpidName}}</span>
         <span class="look-more">查看更多</span>
       </h3>
       <ul class="cat-list">
-        <li v-for="item in categoryList[key]">
-          {{item}}
+        <li v-for="(item,index) in items.cpidChild" :class="{gap:index%4!==0}">
+          {{item.cidName}}
         </li>
       </ul>
     </div>
@@ -17,10 +17,10 @@
 <script type="text/ecmascript-6">
   import {category} from 'api/config';
   export default {
-    created() {
-      this.categoryList = category || {};
-      console.log(category);
-      console.log(this.categoryList);
+    data() {
+      return {
+        categoryList: category
+      };
     }
   };
 </script>
@@ -48,7 +48,7 @@
           font-size 13px
           float right
       .cat-list
-        background-color: #fafafa
+        background-color: #fff
         display flex
         flex-wrap wrap
         li
@@ -57,5 +57,10 @@
           height 40px
           font-size 13px
           border-bottom 1px solid #e9e9e9
-          flex 0 0 25%
+          flex 0 0 24.8%
+          &.gap:before
+            content ' '
+            padding-left 25%
+            font-size 13px
+            border-left 1px solid #dfdfdf
 </style>
