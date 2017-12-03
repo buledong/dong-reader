@@ -1,15 +1,27 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+import Vue from 'vue';
+import Router from 'vue-router';
+import Rank from 'components/rank/rank';
+import Category from 'components/category/category';
+import Search from 'components/search/search';
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
   routes: [
     {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      redirect: '/rank'
+    }, {
+      path: '/rank',
+      component: Rank
+    },
+    {
+      path: '/category',
+      component: Category
+    },
+    {
+      path: '/search',
+      component: Search
     }
   ]
-})
+});
