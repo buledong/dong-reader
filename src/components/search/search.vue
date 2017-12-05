@@ -10,7 +10,9 @@
                  maxlength="15"
           >
         </div>
-        <div class="search-go"></div>
+        <div class="search-go">
+          <i class="icon-search"></i>
+        </div>
       </div>
     </div>
     <div class="hot-title">
@@ -25,7 +27,10 @@
         <li class="top-item" v-for="(item,key,index) in hotList">
           <span class="top-index" :class="'top-' + index">{{index +1}}</span>
           {{key}}
-          <span class="num">{{item}}</span>
+          <span class="num">
+            <i class="icon-user"></i>
+            {{item}}
+          </span>
         </li>
       </ul>
     </div>
@@ -48,6 +53,7 @@
 
 <script type="text/ecmascript-6">
   import {hotList, hotCatList} from 'api/config';
+
   export default {
     created() {
       this.hotList = hotList || {};
@@ -82,11 +88,14 @@
             width 96%
         .search-go
           border-left 1px solid #e1e1e1
-          background-repeat no-repeat
-          background-size 30px 30px
+          background-color: red
           height 30px
           width 30px
-          background-image url('./search.png')
+          .icon-search
+            font-size 22px
+            padding-left 3px
+            color white
+            line-height 30px
     .hot-title
       .title
         color #4c4c4c
@@ -137,11 +146,9 @@
             float right
             color #8f8f8f
             padding-left 25px
-            background-size 11px 11px
-            background-repeat no-repeat
-            background-position 10px 13px
             font-size 11px
-            background-image url('./avatar.png')
+            .icon-user
+              color red 
     .hot-cat
       .title
         color #4c4c4c

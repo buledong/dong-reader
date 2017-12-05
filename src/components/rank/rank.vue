@@ -18,11 +18,19 @@
               {{index+1}}
             </span>
             {{item.bookName}}
-            <span class="num">{{item.number}}</span>
+            <span class="num" v-if="item.number>1000">
+              <i class="icon-up"></i>
+              {{item.number}}
+            </span>
+            <span class="user" v-if="item.number<1000">
+              <i class="icon-user"></i>
+              {{item.authorName}}
+            </span>
           </li>
         </ul>
       </div>
     </div>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -48,15 +56,14 @@
     },
     created() {
 //      this.topLists = this.get();
-      console.log(this.topLists);
-      console.log(this.topList);
+//      console.log(this.topLists);
+//      console.log(this.topList);
     },
     methods: {
       show(item) {
-        console.log(item);
+//        console.log(item);
       },
       getTopList(index) {
-        alert(index);
       },
       getTopFive(index) {
         if (index === 0) {
@@ -119,13 +126,10 @@
             background-color: #e28d29
           &.top-3
             background-color: #9fc575
-        .num
+        .num, .user
           float right
           color #8f8f8f
-          padding-left 25px
-          background-size 11px 11px
-          background-repeat no-repeat
-          background-position 10px 13px
           font-size 11px
-          background-image url('up.png')
+        .icon-up, .icon-user
+          color red
 </style>

@@ -3,7 +3,9 @@ import Router from 'vue-router';
 import Rank from 'components/rank/rank';
 import Category from 'components/category/category';
 import Search from 'components/search/search';
-import List from 'base/list';
+import List from 'base/list/list';
+import Book from 'base/book/book';
+import Reader from 'base/reader/reader';
 
 Vue.use(Router);
 
@@ -26,6 +28,13 @@ export default new Router({
     }, {
       path: '/list',
       component: List
+    }, {
+      path: '/book',
+      component: Book,
+      children: [{
+        path: '123',
+        component: Reader
+      }]
     }
   ]
 });

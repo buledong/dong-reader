@@ -71,6 +71,6 @@ export function getRankList() {
       console.log('Error:', e);
     });
   }
-  console.log(topLists);
+  // console.log(topLists);
   return topLists;
 }
