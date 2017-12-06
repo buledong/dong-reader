@@ -1,11 +1,11 @@
 <template>
   <div class="list">
     <div class="list-top">
-      <div class="back">
+      <div class="back" @click="back">
         <i class="icon-back"></i>
         返回
       </div>
-      <div class="center">中间</div>
+      <div class="center">{{centerTitle}}</div>
       <div class="my">
         <i class="icon-home2"></i>
         我的
@@ -27,48 +27,105 @@
           <span>更新至：</span>
           {{item.updteChapterName}}
         </div>
-        <div class="num" hidden>月票数。。</div>
-        <div class="intero-line">
+        <div class="num" v-if="item.number">
+          <i class="icon-up"></i>
+          月票数：{{item.number}}
+        </div>
+        <div class="intero-line" v-if="!item.number">
           <span>简介：</span>
           {{item.description}}
         </div>
       </div>
     </div>
     <div class="list-bottom">
-      <div class="view-more">查看更多</div>
+      <div class="view-more" @click="getMore">查看更多</div>
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import {getCatList} from 'api/list';
+  import {getCatList, getRankList, getSearchList} from 'api/list';
+  import {mapMutations, mapGetters} from 'vuex';
+  import {rankCategory} from 'api/config';
+
   export default {
-    created() {
-      this.get();
+    data() {
+      return {
+        dataList: [],
+        centerTitle: ''
+      };
     },
-    props: {
-      rank: {
-        type: Boolean,
-        default: false
-      },
-      dataList: {
-        type: Array,
-        default: () => {
-          return [];
+    beforeCreate() {
+      console.log(this.$route);
+    },
+    created() {
+      (() => {
+        switch (this.$route.params.type) {
+          case 'rank':
+            this.getRank();
+            return;
+          case 'category':
+            this.getCategory();
+            return;
+          case 'search':
+            this.getSearch();
         }
-      }
+      })();
+    },
+    computed: {
+      ...mapGetters([
+        'rankQuery',
+        'searchQuery',
+        'categoryQuery'
+      ])
     },
     methods: {
-      get() {
-        getCatList().then((res) => {
+      getRank() {
+        getRankList(this.rankQuery).then((res) => {
+          console.log(this.rankQuery);
+          this.centerTitle = rankCategory[this.rankQuery.rankType - 1] || '百度小说月票榜';
+          this.dataList = [...this.dataList, ...res.ranklist];
           console.log(res);
-          /* this.dataList = res.searchlist.searchBooks; */
-          this.dataList = res.ranklist;
-          console.log(this.dataList);
         }).catch((e) => {
           console.log(e);
         });
-      }
+        console.log('getRank');
+      },
+      getCategory() {
+        getCatList(this.categoryQuery).then((res) => {
+          console.log(this.categoryQuery);
+          this.centerTitle = this.categoryQuery.cidName || '奇幻玄幻';
+          this.dataList = [...this.dataList, ...res.ranklist];
+        }).catch((e) => {
+          console.log(e);
+        });
+      },
+      getSearch() {
+        getSearchList();
+      },
+      getMore() {
+        this.setRankQuery({pageNum: this.rankQuery.pageNum + 1});
+        (() => {
+          switch (this.$route.params.type) {
+            case 'rank':
+              this.getRank();
+              return;
+            case 'category':
+              this.getCategory();
+              return;
+            case 'search':
+              this.getSearch();
+          }
+        })();
+      },
+      back() {
+        this.$router.go(-1);
+      },
+      ...mapMutations({
+        setRankQuery: 'SET_RANK_QUERY',
+        setCategory: 'SET_CATEGORY_QUERY',
+        setSearch: 'SET_SEARCH_QUERY'
+      })
     }
   };
 </script>
@@ -137,14 +194,11 @@
             color #a8a8a8
         .num
           color #8f8f8f
-          padding-left 25px
           height 24px
           line-height 24px
-          background-size 13px 13px
-          background-repeat no-repeat
-          background-position 4px 4px
           font-size 13px
-          background-image url('../up.png')
+          .icon-up
+            color red
         .intero-line
           no-wrap()
           height 24px

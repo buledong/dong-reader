@@ -88,7 +88,7 @@
             width 96%
         .search-go
           border-left 1px solid #e1e1e1
-          background-color: red
+          background-color: #ff4644
           height 30px
           width 30px
           .icon-search
@@ -148,7 +148,7 @@
             padding-left 25px
             font-size 11px
             .icon-user
-              color red 
+              color #ff4644
     .hot-cat
       .title
         color #4c4c4c

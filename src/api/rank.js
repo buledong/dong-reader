@@ -5,7 +5,7 @@
 import jsonp from 'common/js/jsonp';
 import {options, commonParams, rankCategory} from './config';
 
-export function getRank(rankType, pageSize = 10) {
+export function getRank({rankType = 1, pageSize = 10, pageNum = 1}) {
   switch (rankType) {
     case 1:
       rankType = 1;
@@ -22,50 +22,26 @@ export function getRank(rankType, pageSize = 10) {
     case 5:
       rankType = 10;
       break;
+    case 'undefined' :
+      rankType = 1;
   }
+  console.log(rankType, pageSize, pageNum);
   const url = 'https://m.zongheng.com/h5/ajax/rank';
   const data = Object.assign({}, commonParams, {
     rankType,
-    pageSize
+    pageSize,
+    pageNum
   });
   return jsonp(url, data, options);
-}
-
-export function getRankList1() {
-  const topLists = [];
-  for (let i = 0; i < rankCategory.length; i++) {
-    getRank(i + 1, 5).then((res) => {
-      let arr = [];
-      res.ranklist.forEach((item, index) => {
-        arr.push(item.bookName);
-      });
-      topLists[i] = arr.slice(0);
-    }).catch((e) => {
-      console.log('Error:', e);
-    });
-  }
-  console.log(topLists);
-  return topLists;
 }
 
 export function getRankList() {
   const topLists = [];
   for (let i = 0; i < rankCategory.length; i++) {
     topLists[i] = [];
-    getRank(i + 1, 5).then((res) => {
+    getRank({rankType: i + 1, pageSize: 5}).then((res) => {
       res.ranklist.forEach((item, index) => {
-        topLists[i].push({
-          'bookName': item.bookName,
-          'number': item.number,
-          'authorName': item.authorName,
-          'bookId': item.bookId,
-          'categoryName': item.categoryName,
-          'coverUrl': item.coverUrl,
-          'description': item.description,
-          'serialStatus': item.serialStatus,
-          'subCateName': item.subCateName,
-          'updteChapterName': item.updteChapterName
-        });
+        topLists[i].push(item);
       });
     }).catch((e) => {
       console.log('Error:', e);

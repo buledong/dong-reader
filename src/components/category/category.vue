@@ -3,34 +3,66 @@
     <div v-for="(items,key) in categoryList" class="cat-box">
       <h3>
         <span class="key">{{items.cpidName}}</span>
-        <span class="look-more">
+        <span class="look-more" @click="getMore(items)">
           <i class="icon-list2"></i>
           查看更多
         </span>
       </h3>
       <ul class="cat-list">
-        <li v-for="(item,index) in items.cpidChild" :class="{gap:index%4!==0}">
+        <li v-for="(item,index) in items.cpidChild" :class="{gap:index%4!==0}" @click="selectItem(items,item)">
           {{item.cidName}}
         </li>
       </ul>
     </div>
-    <!--<list :data="data"></list>-->
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import {category} from 'api/config';
-  import List from 'base/list/list';
+  import {mapMutations, mapGetters} from 'vuex';
+
   export default {
     data() {
       return {
         categoryList: category
       };
     },
-    components: {
-      List
+    methods: {
+      getMore(items) {
+        const params = {
+          cPid: items.cpidNum,
+          bookType: items.cpidType,
+          cid: -1,
+          cidName: items.cpidName
+        };
+        this.setCategoryQuery(params);
+        console.log(this.categoryQuery);
+        console.log(items);
+        this.$router.push({path: '/list/category'});
+      },
+      selectItem(items, item) {
+        const params = {
+          cPid: items.cpidNum,
+          bookType: items.cpidType,
+          cid: item.cidNum,
+          cidName: item.cidName
+        };
+        this.setCategoryQuery(params);
+        console.log(params);
+        console.log(items, item);
+        this.$router.push({path: '/list/category'});
+      },
+      ...mapMutations({
+        setCategoryQuery: 'SET_CATEGORY_QUERY'
+      })
+    },
+    computed: {
+      ...mapGetters([
+        'categoryQuery'
+      ])
     }
-  };
+  }
+  ;
 </script>
 
 <style lang="stylus" type="text/stylus" scoped>

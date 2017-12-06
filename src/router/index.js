@@ -8,7 +8,6 @@ import Book from 'base/book/book';
 import Reader from 'base/reader/reader';
 
 Vue.use(Router);
-
 export default new Router({
   routes: [
     {
@@ -27,12 +26,15 @@ export default new Router({
       component: Search
     }, {
       path: '/list',
-      component: List
+      component: List,
+      children: [{
+        path: ':type'
+      }]
     }, {
       path: '/book',
       component: Book,
       children: [{
-        path: '123',
+        path: ':id',
         component: Reader
       }]
     }

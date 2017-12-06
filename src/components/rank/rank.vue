@@ -3,7 +3,7 @@
     <div v-for="(item,index) in rankCategory">
       <div>
         <h3 class="title">
-        <span class="title-item" @click="getTopFive(index)">
+        <span class="title-item">
           {{item}}
         </span>
           <span class="top-more" @click="getTopList(index)">
@@ -13,7 +13,7 @@
         <ul class="top-list">
           <li class="top-item"
               v-for="(item,index) in topLists[index]"
-              @click="show(item)">
+              @click="select(item)">
             <span class="top-index" :class="'top-' + (index+1)">
               {{index+1}}
             </span>
@@ -30,13 +30,13 @@
         </ul>
       </div>
     </div>
-    <router-view></router-view>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import {getRankList} from 'api/rank';
   import {rankCategory} from 'api/config';
+  import {mapMutations, mapGetters} from 'vuex';
 
   export default {
     data() {
@@ -52,7 +52,6 @@
     beforeCreate() {
       this.rankCategory = rankCategory;
       this.listOld = getRankList();
-      console.log(this.listOld, 'olsd');
     },
     created() {
 //      this.topLists = this.get();
@@ -60,19 +59,24 @@
 //      console.log(this.topList);
     },
     methods: {
-      show(item) {
-//        console.log(item);
+      select(item) {
+        console.log(item);
+        this.$router.push({path: `/book/${item.bookId}`});
       },
       getTopList(index) {
+        this.setRankQuery({rankType: index + 1});
+        this.$router.push({path: '/list/rank'});
+        console.log(this.rankQuery);
       },
-      getTopFive(index) {
-        if (index === 0) {
-          return;
-        }
-        console.log(index);
-      }
+      ...mapMutations({
+        setRankQuery: 'SET_RANK_QUERY'
+      })
     },
-    computed: {}
+    computed: {
+      ...mapGetters([
+        'rankQuery'
+      ])
+    }
   };
 </script>
 

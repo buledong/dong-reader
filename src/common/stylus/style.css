@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'dong';
-  src:  url('fonts/dong.eot?w13m75');
-  src:  url('fonts/dong.eot?w13m75#iefix') format('embedded-opentype'),
-    url('fonts/dong.ttf?w13m75') format('truetype'),
-    url('fonts/dong.woff?w13m75') format('woff'),
-    url('fonts/dong.svg?w13m75#dong') format('svg');
+  src:  url('fonts/dong.eot?6196vk');
+  src:  url('fonts/dong.eot?6196vk#iefix') format('embedded-opentype'),
+    url('fonts/dong.ttf?6196vk') format('truetype'),
+    url('fonts/dong.woff?6196vk') format('woff'),
+    url('fonts/dong.svg?6196vk#dong') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -56,6 +56,12 @@
 }
 .icon-list2:before {
   content: "\e9bb";
+}
+.icon-prev:before {
+  content: "\ea23";
+}
+.icon-next:before {
+  content: "\ea24";
 }
 .icon-volume:before {
   content: "\ea26";

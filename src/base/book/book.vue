@@ -19,7 +19,12 @@
 </template>
 
 <script type="text/ecmascript-6">
-  export default {};
+  export default {
+    created() {
+      console.log(this.$route);
+    },
+    methods: {}
+  };
 </script>
 
 <style lang="stylus" type="text/stylus" scoped>
