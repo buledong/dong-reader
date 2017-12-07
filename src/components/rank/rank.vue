@@ -53,14 +53,14 @@
       this.rankCategory = rankCategory;
       this.listOld = getRankList();
     },
-    created() {
-//      this.topLists = this.get();
-//      console.log(this.topLists);
-//      console.log(this.topList);
-    },
     methods: {
       select(item) {
         console.log(item);
+        const query = {
+          bookId: item.bookId,
+          chapterId: null
+        };
+        this.setBookInfo(query);
         this.$router.push({path: `/book/${item.bookId}`});
       },
       getTopList(index) {
@@ -69,7 +69,8 @@
         console.log(this.rankQuery);
       },
       ...mapMutations({
-        setRankQuery: 'SET_RANK_QUERY'
+        setRankQuery: 'SET_RANK_QUERY',
+        setBookInfo: 'SET_BOOK_INFO'
       })
     },
     computed: {

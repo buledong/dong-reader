@@ -3,7 +3,7 @@
  */
 'use strict';
 import jsonp from 'common/js/jsonp';
-import {options, commonParams, rankCategory} from './config';
+import {options, rankCategory} from './config';
 
 export function getRank({rankType = 1, pageSize = 10, pageNum = 1}) {
   switch (rankType) {
@@ -27,11 +27,11 @@ export function getRank({rankType = 1, pageSize = 10, pageNum = 1}) {
   }
   console.log(rankType, pageSize, pageNum);
   const url = 'https://m.zongheng.com/h5/ajax/rank';
-  const data = Object.assign({}, commonParams, {
+  const data = {
     rankType,
     pageSize,
     pageNum
-  });
+  };
   return jsonp(url, data, options);
 }
 

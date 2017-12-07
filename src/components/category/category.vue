@@ -33,7 +33,8 @@
           cPid: items.cpidNum,
           bookType: items.cpidType,
           cid: -1,
-          cidName: items.cpidName
+          cPidName: items.cpidName,
+          cidName: ''
         };
         this.setCategoryQuery(params);
         console.log(this.categoryQuery);
@@ -45,6 +46,7 @@
           cPid: items.cpidNum,
           bookType: items.cpidType,
           cid: item.cidNum,
+          cPidName: items.cpidName,
           cidName: item.cidName
         };
         this.setCategoryQuery(params);

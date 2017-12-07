@@ -30,8 +30,7 @@
       };
     },
     created() {
-      this._initChapterBookId();
-      this.getChapter(this.bookId, this.chapterId);
+      this.getChapter(this.bookInfo);
     },
     computed: {
       text() {
@@ -39,14 +38,13 @@
         return this.data.content ? this.data.content.replace(space, '') : '';
       },
       ...mapGetters([
-        'bookId',
-        'chapterId',
-        'prevId',
-        'nextId'
+        'bookInfo'
       ])
     },
     methods: {
-      getChapter(bookId, chapterId) {
+      getChapter() {
+        const bookId = this.bookInfo.bookId || this.$route.params.id;
+        const chapterId = this.bookInfo.chapterId;
         getChapter(bookId, chapterId).then((res) => {
           if (res.ajaxResult.code === 1) {
             console.log('进来了');
@@ -58,34 +56,26 @@
       },
       getPrev() {
         window.scrollTo(0, 0);
-        this.getChapter(this.bookId, this.prevId);
+        const query = {
+          chapterId: this.data.prevId
+        };
+        this.setBookInfo(query);
+        this.getChapter();
       },
       getNext() {
         window.scrollTo(0, 0);
-        this.getChapter(this.bookId, this.nextId);
+        const query = {
+          chapterId: this.data.nextChapterId
+        };
+        this.setBookInfo(query);
+        this.getChapter();
       },
       clickReader(e) {
         console.log(e);
       },
-      _initChapterBookId() {
-        const bookId = this.$route.params.id;
-        this.setBookId(bookId);
-        this.setChapterId(null);
-      },
       ...mapMutations({
-        setBookId: 'SET_BOOK_ID',
-        setChapterId: 'SET_CHAPTER_ID',
-        setPrevId: 'SET_PREV_ID',
-        serNextId: 'SET_NEXT_ID'
+        setBookInfo: 'SET_BOOK_INFO'
       })
-    },
-    watch: {
-      data() {
-        console.log(this.data);
-        this.setChapterId(this.data.chapterId);
-        this.setPrevId(this.data.prevId);
-        this.serNextId(this.data.nextChapterId);
-      }
     }
   };
 </script>
@@ -97,6 +87,7 @@
     font-size 20px
     background-color: #a6bc9c
     .title
+      font-weight bold
       height 44px
       line-height 44px
       text-align center

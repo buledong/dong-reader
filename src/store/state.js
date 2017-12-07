@@ -3,10 +3,12 @@
  */
 'use strict';
 const state = {
-  bookId: 0,
-  chapterId: null,
-  prevId: null,
-  nextId: null,
+  bookInfo: {
+    bookId: 0,
+    chapterId: null,
+    prevId: null,
+    nextId: null
+  },
   rankQuery: {
     rankTpye: 1,
     pageNum: 1,
@@ -19,10 +21,15 @@ const state = {
     pageSize: 10,
     pageNum: 1,
     bookType: 0,
+    cPidName: '',
     cidName: ''
   },
   searchQuery: {
-    keywords: ''
+    keywords: '',
+    h5: 1,
+    pageNum: 1,
+    field: 'all',
+    pageCount: 5
   }
 };
 export default state;

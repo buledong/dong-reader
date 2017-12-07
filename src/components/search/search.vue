@@ -1,20 +1,6 @@
 <template>
   <div class="search">
-    <div class="form">
-      <div class="search-box">
-        <div class="input-box">
-          <input type="text"
-                 title="search-input"
-                 placeholder="请输入关键字" value
-                 class="search-input"
-                 maxlength="15"
-          >
-        </div>
-        <div class="search-go">
-          <i class="icon-search"></i>
-        </div>
-      </div>
-    </div>
+    <search-input></search-input>
     <div class="hot-title">
       <h3 class="title">
         <span class="title-item">
@@ -24,7 +10,7 @@
     </div>
     <div class="hot-list">
       <ul class="top-list">
-        <li class="top-item" v-for="(item,key,index) in hotList">
+        <li class="top-item" @click.stop="selectItem(key)" v-for="(item,key,index) in hotList">
           <span class="top-index" :class="'top-' + index">{{index +1}}</span>
           {{key}}
           <span class="num">
@@ -43,7 +29,7 @@
     </div>
     <div class="hot-cat-list">
       <ul>
-        <li class="hot-item" v-for="item in hotCatList">
+        <li class="hot-item" @click.stop="selectItem(item)" v-for="item in hotCatList">
           {{item}}
         </li>
       </ul>
@@ -53,11 +39,28 @@
 
 <script type="text/ecmascript-6">
   import {hotList, hotCatList} from 'api/config';
+  import searchInput from 'base/search-input/search-input';
+  import {mapMutations} from 'vuex';
 
   export default {
     created() {
       this.hotList = hotList || {};
       this.hotCatList = hotCatList || [];
+    },
+    methods: {
+      selectItem(key) {
+        const query = {
+          keywords: key
+        };
+        this.setSearchQuery(query);
+        this.$router.push({path: 'list/search'});
+      },
+      ...mapMutations({
+        setSearchQuery: 'SET_SEARCH_QUERY'
+      })
+    },
+    components: {
+      searchInput
     }
   };
 </script>
@@ -66,36 +69,6 @@
   .search
     background #f2f2f2
     color #4c4c4c
-    .form
-      background-color: #f2f2f2
-      border-bottom 1px solid #dfdfdf
-      padding 27px 8px
-      .search-box
-        display flex
-        border 1px solid #e1e1e1
-        height 30px
-        background-color: #fff
-        overflow hidden
-        .input-box
-          padding-right 6px
-          flex-basis 96%
-          .search-input
-            padding 1px 0 1px 10px
-            height 30px
-            font-size 14px
-            border 0
-            outline none
-            width 96%
-        .search-go
-          border-left 1px solid #e1e1e1
-          background-color: #ff4644
-          height 30px
-          width 30px
-          .icon-search
-            font-size 22px
-            padding-left 3px
-            color white
-            line-height 30px
     .hot-title
       .title
         color #4c4c4c
