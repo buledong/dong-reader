@@ -7,7 +7,7 @@
         <i class="icon-prev"></i>
         上一章
       </div>
-      <div class="center">
+      <div class="center" @click="clickMenu">
         <i class="icon-list"></i>
         目录
       </div>
@@ -23,6 +23,8 @@
   import {getChapter} from 'api/book';
   import {mapMutations, mapGetters} from 'vuex';
 
+  /* import {prefixStyle} from 'common/js/dom';
+  const transform = prefixStyle('transform'); */
   export default {
     data() {
       return {
@@ -30,7 +32,7 @@
       };
     },
     created() {
-      this.getChapter(this.bookInfo);
+      this.getChapter();
     },
     computed: {
       text() {
@@ -42,9 +44,13 @@
       ])
     },
     methods: {
+      refresh() {
+        this.getChapter();
+      },
       getChapter() {
         const bookId = this.bookInfo.bookId || this.$route.params.id;
         const chapterId = this.bookInfo.chapterId;
+        console.log(chapterId);
         getChapter(bookId, chapterId).then((res) => {
           if (res.ajaxResult.code === 1) {
             console.log('进来了');
@@ -71,7 +77,42 @@
         this.getChapter();
       },
       clickReader(e) {
+        const allHeight = window.innerHeight;
+        const oneHeight = allHeight / 10 | 0;
+        const layerY = e.layerY;
+        const clientY = e.clientY;
+        if (clientY < oneHeight || clientY > 9 * oneHeight) {
+          console.log('越界了');
+          return;
+        } else if (clientY >= oneHeight && clientY < 4 * oneHeight) {
+          console.log('上');
+          window.scrollTo(0, layerY - clientY - allHeight - 15);
+          this.hiddenMenu();
+          /* console.log(transform);
+          console.log(this.$refs.reader);
+          this.$refs.reader.style[transform] = `translate3d(0,${layerY - clientY - allHeight - 15}px,0)`; */
+        } else if (clientY >= 4 * oneHeight && clientY < 6 * oneHeight) {
+          console.log('中');
+          this.showMenu();
+        } else if (clientY >= 6 * oneHeight && clientY < 9 * oneHeight) {
+          console.log('下');
+          window.scrollTo(0, layerY - clientY + allHeight - 15);
+          this.hiddenMenu();
+        }
+        console.log('oneHeight:' + oneHeight);
         console.log(e);
+        console.log('e.layerY' + e.layerY);
+        console.log('e.clientY:' + e.clientY);
+        console.log('window.innerHeight' + window.innerHeight);
+      },
+      clickMenu() {
+        this.$emit('clickMenu');
+      },
+      hiddenMenu() {
+        this.$emit('hiddenMenu');
+      },
+      showMenu() {
+        this.$emit('showMenu');
       },
       ...mapMutations({
         setBookInfo: 'SET_BOOK_INFO'

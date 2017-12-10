@@ -4,6 +4,7 @@ import router from './router';
 import VueLazyLoad from 'vue-lazyload';
 import 'common/stylus/index.styl';
 import store from './store';
+import 'common/stylus/style.css';
 
 Vue.config.productionTip = false;
 /* eslint-disable no-new */

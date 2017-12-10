@@ -22,7 +22,6 @@
 
 <script type="text/ecmascript-6">
   import {mapMutations} from 'vuex';
-
   export default {
     data() {
       return {

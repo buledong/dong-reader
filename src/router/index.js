@@ -6,6 +6,7 @@ import Search from 'components/search/search';
 import List from 'base/list/list';
 import Book from 'base/book/book';
 import Reader from 'base/reader/reader';
+import My from 'components/my/my';
 
 Vue.use(Router);
 export default new Router({
@@ -37,6 +38,9 @@ export default new Router({
         path: ':id',
         component: Reader
       }]
+    }, {
+      path: '/my',
+      component: My
     }
   ]
 });
