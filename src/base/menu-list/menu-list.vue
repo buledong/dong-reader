@@ -40,7 +40,6 @@
 <script type="text/ecmascript-6">
   import {getChapterList} from 'api/list';
   import {mapMutations, mapGetters} from 'vuex';
-
   export default {
     data() {
       return {

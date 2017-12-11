@@ -10,7 +10,7 @@ const state = {
     nextId: null
   },
   rankQuery: {
-    rankTpye: 1,
+    rankType: 1,
     pageNum: 1,
     pageSize: 10
   },
@@ -30,6 +30,10 @@ const state = {
     pageNum: 1,
     field: 'all',
     pageCount: 5
+  },
+  styleQuery: {
+    fontSize: 18,
+    backgroundColor: 'f7f6f2'
   }
 };
 export default state;

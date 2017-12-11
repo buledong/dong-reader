@@ -73,7 +73,6 @@
   import {mapMutations, mapGetters} from 'vuex';
   import {rankCategory, categoryTabTitle} from 'api/config';
   import searchInput from 'base/search-input/search-input';
-
   export default {
     data() {
       return {
@@ -87,14 +86,12 @@
         categoryTabTitle
       };
     },
-    beforeCreate() {
-      console.log(this.$route);
-    },
     created() {
       (() => {
         switch (this.$route.params.type) {
           case 'rank':
             this.rankShow = true;
+            this.setRankQuery({pageNum: 1});
             this.getRank();
             return;
           case 'category':
@@ -124,21 +121,17 @@
       getRank() {
         getRankList(this.rankQuery).then((res) => {
           this.hasMore = res.ajaxResult.code === 1;
-          console.log(this.rankQuery);
           this.centerTitle = rankCategory[this.rankQuery.rankType - 1] || '百度小说月票榜';
           this.loadingMore = false;
           this.dataList = [...this.dataList, ...res.ranklist];
-          console.log(res);
         }).catch((e) => {
           console.log(e);
         });
-        console.log('getRank');
       },
       getCategory() {
         getCatList(this.categoryQuery).then((res) => {
           this.hasMore = res.ajaxResult.code === 0;
           this.loadingMore = false;
-          console.log(this.categoryQuery);
           this.centerTitle = this.categoryQuery.cidName || '奇幻玄幻';
           this.dataList = [...this.dataList, ...res.ranklist];
         }).catch((e) => {
@@ -151,7 +144,6 @@
           this.loadingMore = false;
           this.centerTitle = '搜索结果';
           this.dataList = [...this.dataList, ...res.searchlist.searchBooks];
-          console.log(res);
         }).catch((e) => {
           console.log(e);
         });
@@ -161,27 +153,25 @@
           return;
         }
         this.loadingMore = true;
-        (() => {
-          switch (this.$route.params.type) {
-            case 'rank':
-              this.setRankQuery({pageNum: this.rankQuery.pageNum + 1});
-              this.getRank();
-              return;
-            case 'category':
-              this.setCategoryQuery({pageNum: this.categoryQuery.pageNum + 1});
-              this.getCategory();
-              return;
-            case 'search':
-              this.setSearchQuery({pageNum: this.searchQuery.pageNum + 1});
-              this.getSearch();
-          }
-        })();
+        switch (this.$route.params.type) {
+          case 'rank':
+            this.setRankQuery({pageNum: this.rankQuery.pageNum + 1});
+            //  console.log(JSON.parse(local.rankQuery).pageNum);
+            this.getRank();
+            return;
+          case 'category':
+            this.setCategoryQuery({pageNum: this.categoryQuery.pageNum + 1});
+            this.getCategory();
+            return;
+          case 'search':
+            this.setSearchQuery({pageNum: this.searchQuery.pageNum + 1});
+            this.getSearch();
+        }
       },
       back() {
         this.$router.go(-1);
       },
       goToBook(item) {
-        console.log(item);
         const query = {
           bookId: item.bookId,
           chapterId: null

@@ -64,7 +64,11 @@
         this.$router.push({path: `/book/${item.bookId}`});
       },
       getTopList(index) {
-        this.setRankQuery({rankType: index + 1});
+        const query = {
+          rankType: index + 1,
+          pageNum: 1
+        };
+        this.setRankQuery(query);
         this.$router.push({path: '/list/rank'});
         console.log(this.rankQuery);
       },

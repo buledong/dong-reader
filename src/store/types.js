@@ -9,3 +9,5 @@ export const SET_RANK_QUERY = 'SET_RANK_QUERY';
 export const SET_CATEGORY_QUERY = 'SET_CATEGORY_QUERY';
 
 export const SET_SEARCH_QUERY = 'SET_SEARCH_QUERY';
+
+export const SET_STYLE_QUERY = 'SET_STYLE_QUERY';

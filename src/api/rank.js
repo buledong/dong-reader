@@ -25,7 +25,6 @@ export function getRank({rankType = 1, pageSize = 10, pageNum = 1}) {
     case 'undefined' :
       rankType = 1;
   }
-  console.log(rankType, pageSize, pageNum);
   const url = 'https://m.zongheng.com/h5/ajax/rank';
   const data = {
     rankType,

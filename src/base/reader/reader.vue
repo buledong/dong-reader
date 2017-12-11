@@ -23,16 +23,20 @@
   import {getChapter} from 'api/book';
   import {mapMutations, mapGetters} from 'vuex';
 
+  const localStyle = window.localStorage.styleQuery ? JSON.parse(window.localStorage.styleQuery) : null;
   /* import {prefixStyle} from 'common/js/dom';
   const transform = prefixStyle('transform'); */
   export default {
     data() {
       return {
-        data: {}
+        data: {},
+        localStyle
       };
     },
-    created() {
-      this.getChapter();
+    beforeCreate() {
+    },
+    mounted() {
+      this._initReader();
     },
     computed: {
       text() {
@@ -40,20 +44,27 @@
         return this.data.content ? this.data.content.replace(space, '') : '';
       },
       ...mapGetters([
-        'bookInfo'
+        'bookInfo',
+        'styleQuery'
       ])
     },
     methods: {
+      _initReader() {
+        this.setStyle(true);
+        this.getChapter();
+        const _this = this;
+        window.addEventListener('setItemEvent', () => {
+          _this.setStyle();
+        });
+      },
       refresh() {
         this.getChapter();
       },
       getChapter() {
         const bookId = this.bookInfo.bookId || this.$route.params.id;
         const chapterId = this.bookInfo.chapterId;
-        console.log(chapterId);
         getChapter(bookId, chapterId).then((res) => {
           if (res.ajaxResult.code === 1) {
-            console.log('进来了');
             this.data = res.result;
           }
         }).catch((e) => {
@@ -82,28 +93,18 @@
         const layerY = e.layerY;
         const clientY = e.clientY;
         if (clientY < oneHeight || clientY > 9 * oneHeight) {
-          console.log('越界了');
-          return;
         } else if (clientY >= oneHeight && clientY < 4 * oneHeight) {
-          console.log('上');
           window.scrollTo(0, layerY - clientY - allHeight - 15);
           this.hiddenMenu();
           /* console.log(transform);
           console.log(this.$refs.reader);
           this.$refs.reader.style[transform] = `translate3d(0,${layerY - clientY - allHeight - 15}px,0)`; */
         } else if (clientY >= 4 * oneHeight && clientY < 6 * oneHeight) {
-          console.log('中');
           this.showMenu();
         } else if (clientY >= 6 * oneHeight && clientY < 9 * oneHeight) {
-          console.log('下');
           window.scrollTo(0, layerY - clientY + allHeight - 15);
           this.hiddenMenu();
         }
-        console.log('oneHeight:' + oneHeight);
-        console.log(e);
-        console.log('e.layerY' + e.layerY);
-        console.log('e.clientY:' + e.clientY);
-        console.log('window.innerHeight' + window.innerHeight);
       },
       clickMenu() {
         this.$emit('clickMenu');
@@ -114,9 +115,33 @@
       showMenu() {
         this.$emit('showMenu');
       },
+      setStyle(init) {
+        let style;
+        if (init) {
+          style = localStyle || this.styleQuery;
+          console.log(style, 'init');
+        } else {
+          style = this.styleQuery;
+        }
+        console.log(this.$refs.reader);
+        const fontSize = style.fontSize;
+        const backgroundColor = style.backgroundColor;
+        console.log(style);
+        this.$refs.reader.setAttribute('style', `font-size:${fontSize}px;background-color:#${backgroundColor}`);
+      },
       ...mapMutations({
         setBookInfo: 'SET_BOOK_INFO'
       })
+    },
+    watch: {
+      styleQuery() {
+        console.log('变了');
+        this.setStyle();
+      },
+      localStyle() {
+        console.log('变了');
+        this.setStyle();
+      }
     }
   };
 </script>
@@ -132,7 +157,7 @@
       height 44px
       line-height 44px
       text-align center
-      padding 0 10px
+      padding 10px
     .text
       padding 0 10px 10px
       overflow-x hidden
