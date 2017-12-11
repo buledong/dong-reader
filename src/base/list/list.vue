@@ -6,7 +6,7 @@
         返回
       </div>
       <div class="center">{{centerTitle}}</div>
-      <div class="my">
+      <div class="my" @click.stop="goToMy">
         <i class="icon-home2"></i>
         我的
       </div>
@@ -15,15 +15,15 @@
       <search-input></search-input>
       <h3 class="desc">
         <em></em>
-        搜索“{{searchQuery.keywords}}”的结果
+        搜索“{{search.keywords}}”的结果
       </h3>
     </div>
     <div v-if="categoryShow" class="category-top">
       <h3 class="desc">
         <em></em>
-        {{categoryQuery.cPidName}}
-        <span v-if="categoryQuery.cidName">--</span>
-        {{categoryQuery.cidName}}
+        {{category.cPidName}}
+        <span v-if="category.cidName">--</span>
+        {{category.cidName}}
       </h3>
       <div class="tab-title">
         <div class="tab-item"
@@ -73,6 +73,8 @@
   import {mapMutations, mapGetters} from 'vuex';
   import {rankCategory, categoryTabTitle} from 'api/config';
   import searchInput from 'base/search-input/search-input';
+
+  const local = window.localStorage;
   export default {
     data() {
       return {
@@ -92,15 +94,15 @@
           case 'rank':
             this.rankShow = true;
             this.setRankQuery({pageNum: 1});
-            this.getRank();
+            this.getRank(true);
             return;
           case 'category':
             this.categoryShow = true;
-            this.getCategory();
+            this.getCategory(true);
             return;
           case 'search':
             this.searchShow = true;
-            this.getSearch();
+            this.getSearch(true);
         }
       })();
     },
@@ -111,6 +113,12 @@
         }
         return this.hasMore ? '查看更多' : '木有更多了( ˙﹏˙ )';
       },
+      category() {
+        return local.categoryQuery ? JSON.parse(local.categoryQuery) : this.categoryQuery;
+      },
+      search() {
+        return local.searchQuery ? JSON.parse(local.searchQuery) : this.searchQuery;
+      },
       ...mapGetters([
         'rankQuery',
         'searchQuery',
@@ -118,8 +126,14 @@
       ])
     },
     methods: {
-      getRank() {
-        getRankList(this.rankQuery).then((res) => {
+      getRank(init) {
+        let rankQuery;
+        if (init) {
+          rankQuery = local.rankQuery ? JSON.parse(local.rankQuery) : this.rankQuery;
+        } else {
+          rankQuery = this.rankQuery;
+        }
+        getRankList(rankQuery).then((res) => {
           this.hasMore = res.ajaxResult.code === 1;
           this.centerTitle = rankCategory[this.rankQuery.rankType - 1] || '百度小说月票榜';
           this.loadingMore = false;
@@ -128,18 +142,30 @@
           console.log(e);
         });
       },
-      getCategory() {
-        getCatList(this.categoryQuery).then((res) => {
+      getCategory(init) {
+        let categoryQuery;
+        if (init) {
+          categoryQuery = local.categoryQuery ? JSON.parse(local.categoryQuery) : this.categoryQuery;
+        } else {
+          categoryQuery = this.categoryQuery;
+        }
+        getCatList(categoryQuery).then((res) => {
           this.hasMore = res.ajaxResult.code === 0;
           this.loadingMore = false;
-          this.centerTitle = this.categoryQuery.cidName || '奇幻玄幻';
+          this.centerTitle = categoryQuery.cidName || '奇幻玄幻';
           this.dataList = [...this.dataList, ...res.ranklist];
         }).catch((e) => {
           console.log(e);
         });
       },
-      getSearch() {
-        getSearchList(this.searchQuery).then((res) => {
+      getSearch(init) {
+        let searchQuery;
+        if (init) {
+          searchQuery = local.searchQuery ? JSON.parse(local.searchQuery) : this.searchQuery;
+        } else {
+          searchQuery = this.searchQuery;
+        }
+        getSearchList(searchQuery).then((res) => {
           this.hasMore = res.ajaxResult.code === 1;
           this.loadingMore = false;
           this.centerTitle = '搜索结果';
@@ -174,10 +200,14 @@
       goToBook(item) {
         const query = {
           bookId: item.bookId,
-          chapterId: null
+          chapterId: null,
+          bookName: item.bookName
         };
         this.setBookInfo(query);
         this.$router.push({path: `/book/${item.bookId}`});
+      },
+      goToMy() {
+        this.$router.push({path: `/my`});
       },
       selectTabItem(index) {
         const query = {

@@ -40,6 +40,7 @@
 <script type="text/ecmascript-6">
   import {getChapterList} from 'api/list';
   import {mapMutations, mapGetters} from 'vuex';
+
   export default {
     data() {
       return {
@@ -92,17 +93,15 @@
 //        this.$router.go(0);
       },
       prev() {
-        if (!this.pageNum === 1) {
+        if (!(this.pageNum === 1)) {
           this.pageNum -= 1;
           this.getChapterList();
         }
       },
       next() {
         if (!(this.pageNum === (this.chapterCount / 20 | 0) + 1)) {
-          console.log('1111');
           this.pageNum += 1;
         } else {
-          console.log('1111222');
           this.pageNum = 1;
         }
         this.getChapterList();
@@ -121,6 +120,7 @@
 
 <style lang="stylus" type="text/stylus" scoped>
   @import "~common/stylus/variable"
+  @import "~common/stylus/mixin"
   .menu-list
     z-index 1
     position absolute
@@ -195,8 +195,9 @@
           height 100%
           opacity 0
           .list-item
+            font-size 16px
+            no-wrap()
             text-align center
-            word-spacing 3px
         i
           padding 0 5px
     footer

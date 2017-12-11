@@ -7,7 +7,8 @@ const state = {
     bookId: 0,
     chapterId: null,
     prevId: null,
-    nextId: null
+    nextId: null,
+    bookName: ''
   },
   rankQuery: {
     rankType: 1,
@@ -33,7 +34,8 @@ const state = {
   },
   styleQuery: {
     fontSize: 18,
-    backgroundColor: 'f7f6f2'
+    backgroundColor: 'f7f6f2',
+    color: '2e343f'
   }
 };
 export default state;

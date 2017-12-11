@@ -1,13 +1,41 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Rank from 'components/rank/rank';
-import Category from 'components/category/category';
-import Search from 'components/search/search';
-import List from 'base/list/list';
-import Book from 'base/book/book';
-import Reader from 'base/reader/reader';
-import My from 'components/my/my';
 
+const Rank = (resolve) => {
+  import('components/rank/rank').then((module) => {
+    resolve(module);
+  });
+};
+const Category = (resolve) => {
+  import('components/category/category').then((module) => {
+    resolve(module);
+  });
+};
+const Search = (resolve) => {
+  import('components/search/search').then((module) => {
+    resolve(module);
+  });
+};
+const List = (resolve) => {
+  import('base/list/list').then((module) => {
+    resolve(module);
+  });
+};
+const Book = (resolve) => {
+  import('base/book/book').then((module) => {
+    resolve(module);
+  });
+};
+const Reader = (resolve) => {
+  import('base/reader/reader').then((module) => {
+    resolve(module);
+  });
+};
+const My = (resolve) => {
+  import('components/my/my').then((module) => {
+    resolve(module);
+  });
+};
 Vue.use(Router);
 export default new Router({
   routes: [

@@ -6,10 +6,12 @@
           <i class="icon-back"></i>
           返回
         </div>
-        <div class="chapter"></div>
-        <div class="my">我的</div>
+        <div class="chapter">
+          {{bookName}}
+        </div>
+        <div class="my" @click.stop="goToMy">我的</div>
       </div>
-      <div class="menu-set">
+      <div class="menu-set" v-show="show">
         <div class="set-font" @click="fontChange($event)">
           <div id="ft">
             <span>字</span>
@@ -97,8 +99,9 @@
 
 <script type="text/ecmascript-6">
   import menuList from 'base/menu-list/menu-list';
-  import {mapMutations} from 'vuex';
+  import {mapMutations, mapGetters} from 'vuex';
 
+  const local = window.localStorage;
   export default {
     data() {
       return {
@@ -145,9 +148,20 @@
         };
         this.setStyleQuery(query);
       },
+      goToMy() {
+        this.$router.push({path: `/my`});
+      },
       ...mapMutations({
         setStyleQuery: 'SET_STYLE_QUERY'
       })
+    },
+    computed: {
+      bookName() {
+        return local.bookInfo ? JSON.parse(local.bookInfo).bookName : this.bookInfo.bookName;
+      },
+      ...mapGetters([
+        'bookInfo'
+      ])
     },
     components: {
       menuList

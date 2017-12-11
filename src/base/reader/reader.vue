@@ -61,9 +61,11 @@
         this.getChapter();
       },
       getChapter() {
-        const bookId = this.bookInfo.bookId || this.$route.params.id;
-        const chapterId = this.bookInfo.chapterId;
-        getChapter(bookId, chapterId).then((res) => {
+        const query = {
+          bookId: this.bookInfo.bookId || this.$route.params.id,
+          chapterId: this.bookInfo.chapterId
+        };
+        getChapter(query).then((res) => {
           if (res.ajaxResult.code === 1) {
             this.data = res.result;
           }
@@ -94,7 +96,7 @@
         const clientY = e.clientY;
         if (clientY < oneHeight || clientY > 9 * oneHeight) {
         } else if (clientY >= oneHeight && clientY < 4 * oneHeight) {
-          window.scrollTo(0, layerY - clientY - allHeight - 15);
+          window.scrollTo(0, layerY - clientY - allHeight - 8);
           this.hiddenMenu();
           /* console.log(transform);
           console.log(this.$refs.reader);
@@ -102,7 +104,7 @@
         } else if (clientY >= 4 * oneHeight && clientY < 6 * oneHeight) {
           this.showMenu();
         } else if (clientY >= 6 * oneHeight && clientY < 9 * oneHeight) {
-          window.scrollTo(0, layerY - clientY + allHeight - 15);
+          window.scrollTo(0, layerY - clientY + allHeight - 8);
           this.hiddenMenu();
         }
       },
